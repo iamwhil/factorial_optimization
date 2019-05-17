@@ -2,9 +2,9 @@
 
 ## Justification
 
-At the University of Hawaii at Manoa we utilized factorial design of experiments in order to opitmize the performance of non-thermal plasma reformers.  Lots of words there - phew.  I got to use and be prevy to very similar if not exactly the same design of experiment methodology at General Motors Fuel Cell Activities, and Moneta Trades. However, it was mostly done by hand and Microsoft Excel. Which is a wonderful tool for this kind of work.
+At the University of Hawaii at Manoa we utilized factorial design of experiments in order to opitmize the performance of non-thermal plasma reformers.  Lots of words there - phew.  I got to use and be prevy to very similar if not exactly the same design of experiment methodology at General Motors - Fuel Cell Activities, Moneta Trades, and PAIRIN for algorithm optimization. However, it was mostly done by hand and Microsoft Excel. Which is a wonderful tool for this kind of work.
 
-However I started to wonder, would it be possible to automate the design of the experiment?  Would it be possible to automate the calculation of main and interaction effects?  Would it be possible to calculate the path of steepest ascent through the factor space? Would it be possible to automate the journey through the path of steepest ascent, find the maximum along that line, identify a new center point, and repeat?  Basically automate the entire process until the optimal point within a factor space was discovered.
+However I started to wonder, would it be possible to automate the design of the experiment?  Would it be possible to automate the calculation of main and interaction effects?  Would it be possible to calculate the path of steepest ascent through the factor space? Would it be possible to automate the journey through the path of steepest ascent, find the maximum along that line, identify a new center point, and repeat?  Basically automate the entire process until the optimal point within a factor space was discovered... and not in VBA :P.
 
 Previously I had the experience of having to design the experiment - and then run all of the tests!  That could take a day per test.  Well then, a 2^3 experiment would have 8 runs and take 8 days.  4 parameters and we're looking at 16 days of straight experiments.
 
