@@ -72,53 +72,61 @@ end
 
 array = ["A", "B"]
 
-perms = permutations(array.dup)
-puts perms
-puts perms.length
-
-def build_column(run, parameter_count)
-  toggle = 2**run / 2
-  count = 0
-  2**parameter_count.times do 
-    if count < toggle
-      matrix[j][run] = 1
-    else
-      matrix[j][run] = -1 
-    end
-    count += 1
-    if count >= toggle 
-      count = 0 
-    end
-  end
+column_headers = permutations(array.dup)
+puts column_headers.inspect
+i = 0
+column_headers = column_headers.inject({}) do |summ, header|
+  summ[header] = i
+  i += 1
+  summ
 end
+puts column_headers.inspect
 
-def build_matrix(parameter_count, keys)
-  matrix = []
-  for i in 0..2**parameter_count -1 
-    matrix << []
-  end
-  for i in 1..parameter_count
-    toggle = 2**i / 2
-    count = 0
-    for j in 0..2**parameter_count - 1
-      if count < toggle
-        matrix[j][i - 1] = 1
-      else
-        matrix[j][i - 1] = -1 
-      end
-      count += 1
-      if count >= toggle * 2
-        count = 0 
-      end
-    end
-  end
-  matrix
-end
+# def build_column(run, parameter_count)
+#   toggle = 2**run / 2
+#   count = 0
+#   2**parameter_count.times do 
+#     if count < toggle
+#       matrix[j][run] = 1
+#     else
+#       matrix[j][run] = -1 
+#     end
+#     count += 1
+#     if count >= toggle 
+#       count = 0 
+#     end
+#   end
+# end
 
-puts "ARRAY: #{array}"
+# def build_matrix(parameter_count, keys)
+#   matrix = []
+#   for i in 0..2**parameter_count -1 
+#     matrix << []
+#   end
+#   for i in 1..parameter_count
+#     toggle = 2**i / 2
+#     count = 0
+#     for j in 0..2**parameter_count - 1
+#       if count < toggle
+#         matrix[j][i - 1] = 1
+#       else
+#         matrix[j][i - 1] = -1 
+#       end
+#       count += 1
+#       if count >= toggle * 2
+#         count = 0 
+#       end
+#     end
+#   end
+#   matrix
+# end
 
-# Matrix as array of arrays or 
-# Matrix object with named cells (ij) ? 
+# puts "ARRAY: #{array}"
 
-matrix = build_matrix(array.length, perms)
-puts matrix[0]
+# # Matrix as array of arrays or 
+# # Matrix object with named cells (ij) ? 
+
+# matrix = build_matrix(array.length, keys)
+# puts matrix[0]
+# puts keys.inspect
+# puts keys[array.length].split('')
