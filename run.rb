@@ -62,71 +62,94 @@ def permutations(array)
     working_element = array.shift
     return_array.each do |element|
       if !element.include?(working_element)
-        return_array << (element + working_element).split('').sort.join.to_s
+        return_array << ("#{element} #{working_element}").split(' ').sort.join(' ').to_s
       end
     end
   end
   return_array.uniq
 end
 
+array = ["A", "B", "C"]
 
-array = ["A", "B"]
+column_labels = permutations(array.dup)
 
-column_headers = permutations(array.dup)
-puts column_headers.inspect
 i = 0
-column_headers = column_headers.inject({}) do |summ, header|
+column_headers = column_labels.inject({}) do |summ, header|
   summ[header] = i
   i += 1
   summ
 end
-puts column_headers.inspect
 
-# def build_column(run, parameter_count)
-#   toggle = 2**run / 2
-#   count = 0
-#   2**parameter_count.times do 
-#     if count < toggle
-#       matrix[j][run] = 1
-#     else
-#       matrix[j][run] = -1 
-#     end
-#     count += 1
-#     if count >= toggle 
-#       count = 0 
-#     end
-#   end
-# end
+i = 0
+column_keys = column_labels.inject({}) do |summ, header|
+  summ[i] = header
+  i += 1
+  summ
+end
 
-# def build_matrix(parameter_count, keys)
-#   matrix = []
-#   for i in 0..2**parameter_count -1 
-#     matrix << []
-#   end
-#   for i in 1..parameter_count
-#     toggle = 2**i / 2
-#     count = 0
-#     for j in 0..2**parameter_count - 1
-#       if count < toggle
-#         matrix[j][i - 1] = 1
-#       else
-#         matrix[j][i - 1] = -1 
-#       end
-#       count += 1
-#       if count >= toggle * 2
-#         count = 0 
-#       end
-#     end
-#   end
-#   matrix
-# end
+
+def build_column(run, parameter_count)
+  toggle = 2**run / 2
+  count = 0
+  2**parameter_count.times do 
+    if count < toggle
+      matrix[j][run] = 1
+    else
+      matrix[j][run] = -1 
+    end
+    count += 1
+    if count >= toggle 
+      count = 0 
+    end
+  end
+end
+
+def build_factor_matrix(parameter_count)
+  matrix = []
+  for i in 0..2**parameter_count -1 
+    matrix << []
+  end
+  for i in 1..parameter_count
+    toggle = 2**i / 2
+    count = 0
+    for j in 0..2**parameter_count - 1
+      if count < toggle
+        matrix[j][i - 1] = 1
+      else
+        matrix[j][i - 1] = -1 
+      end
+      count += 1
+      if count >= toggle * 2
+        count = 0 
+      end
+    end
+  end
+  matrix
+end
+
+def build_experimental_matrix(matrix, column_headers, column_keys)
+  initial_row_length = matrix[0].length
+  matrix.each do |run|
+    for i in initial_row_length..column_keys.length-1
+      columns_to_multiply = column_keys[i].split(" ")
+      test_value = columns_to_multiply.inject(1) do |summ, column_header|
+        working_index = column_headers[column_header]
+        summ = summ * run[working_index]
+        summ
+      end
+      run[i] = test_value
+    end
+  end
+  matrix
+end
 
 # puts "ARRAY: #{array}"
 
-# # Matrix as array of arrays or 
-# # Matrix object with named cells (ij) ? 
+# Matrix as array of arrays or 
+# Matrix object with named cells (ij) ? 
 
-# matrix = build_matrix(array.length, keys)
-# puts matrix[0]
+factor_matrix = build_factor_matrix(array.length)
+experimental_matrix = build_experimental_matrix(factor_matrix, column_headers, column_keys)
+puts experimental_matrix.inspect
 # puts keys.inspect
 # puts keys[array.length].split('')
