@@ -124,6 +124,10 @@ matrix = Matrix.new(experimental_matrix, column_headers, column_keys)
 
 args = {}
 args['factor_space_width'] = 20
+args['name'] = "test_experiment"
 experiment = Experiment.new(args)
 
 experiment.describe_parameter("catalyst")
+puts experiment.experimental_matrix.inspect
+puts experiment.name
+experiment.describe

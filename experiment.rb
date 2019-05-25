@@ -1,12 +1,14 @@
 class Experiment
+  require_relative 'experimental_matrix_builder.rb'
 
-  attr_accessor :experimental_matrix, :results_matrix, :parameters, :factor_space_width
+  attr_accessor :experimental_matrix, :results_matrix, :parameters, :factor_space_width, :name
   attr_reader :input_parameters_file
 
   def initialize(args={})
+    @name = args['name'] ||= 'experiment'
     @input_parameters_file = args['input_parameters_file'] ||= './inputs.csv'
     @factor_space_width = args['factor_space_width'] ||= 20
-    @experimental_matrix = args['experimental_matrix']
+    @experimental_matrix = build_experimental_matrix
   end
 
   def X 
@@ -44,6 +46,13 @@ class Experiment
     end
   end
 
+  def describe
+    puts "\nExperiment: #{name}\n"
+    puts "Full factorial 2^#{parameters.length} experiment - #{2**parameters.length} runs\n"
+    puts describe_parameters
+    
+  end
+
   private
 
     def build_input_parameters
@@ -66,12 +75,7 @@ class Experiment
     end
 
     def build_experimental_matrix
-      # get array of column shorthand labels
-      # get permutations
-      # column labels => labels to indices
-      # column keys => indices to label
-      # build factor matrix
-      # build experimental matrix
+      ::ExperimentalMatrixBuilder.new(parameters).call
     end
 
     def shorthand_permutations(array)
