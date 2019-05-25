@@ -3,38 +3,10 @@
 # Just you wait n' see!
 
 require 'csv'
+require_relative './matrix.rb'
+require_relative './input_parameter.rb'
+require_relative './experiment.rb'
 
-class InputParameter
-
-  attr_accessor :min, :max, :name
-
-  def initialize(args)
-    build_input_parameters(args)
-  end
-
-  def build_input_parameters(args)
-    @min = args[:min].to_f
-    @max = args[:max].to_f
-    @name = args[:name]
-  end
-
-  def step_size(factor_space_width)
-    (max - min) / factor_space_width.to_f
-  end
-
-  def mid_point
-    (max - min) / 2.0
-  end
-
-  def info 
-    puts self.name
-    puts self.min
-    puts self.max 
-    puts self.step_size(20)
-    puts self.mid_point
-  end
-
-end
 
 def build_input_parameters(file_path='./inputs.csv')
   parameters = []
@@ -69,7 +41,7 @@ def permutations(array)
   return_array.uniq
 end
 
-array = ["A", "B", "C"]
+array = ["A", "B"]
 
 column_labels = permutations(array.dup)
 
@@ -143,13 +115,15 @@ def build_experimental_matrix(matrix, column_headers, column_keys)
   matrix
 end
 
-# puts "ARRAY: #{array}"
-
-# Matrix as array of arrays or 
-# Matrix object with named cells (ij) ? 
-
 factor_matrix = build_factor_matrix(array.length)
 experimental_matrix = build_experimental_matrix(factor_matrix, column_headers, column_keys)
-puts experimental_matrix.inspect
-# puts keys.inspect
-# puts keys[array.length].split('')
+
+matrix = Matrix.new(experimental_matrix, column_headers, column_keys)
+
+
+
+args = {}
+args['factor_space_width'] = 20
+experiment = Experiment.new(args)
+
+experiment.describe_parameter("catalyst")
