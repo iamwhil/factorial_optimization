@@ -24,7 +24,7 @@ class Matrix
 
   def describe
     matrix.each do |row|
-      puts row.join(" | ")
+      puts row.map{|element| element.to_s.rjust(2,' ')}.join(" | ")
     end
   end
 

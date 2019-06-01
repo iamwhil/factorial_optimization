@@ -19,6 +19,24 @@ class Experiment
     results_matrix
   end
 
+  def center_point_run
+    # Center point run
+  end
+
+  def run(run_number)
+    experimental_matrix.row(run_number)
+  end
+
+  def run_parameters(run_number)
+    parameter_hash = {}
+    coded_run = run(run_number)
+    parameters.each_with_index do |parameter, index|
+      run_value = parameters[index].mid_point + (coded_run[index] * parameters[index].step_size(factor_space_width))
+      parameter_hash[parameter.name] = run_value
+    end
+    parameter_hash
+  end
+
   def parameters
     @parameters ||= build_input_parameters
   end
@@ -47,10 +65,11 @@ class Experiment
   end
 
   def describe
+    puts "_________________"
     puts "\nExperiment: #{name}\n"
     puts "Full factorial 2^#{parameters.length} experiment - #{2**parameters.length} runs\n"
     puts describe_parameters
-    
+    puts "_________________"
   end
 
   private
