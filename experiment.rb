@@ -5,10 +5,11 @@ class Experiment
   attr_reader :input_parameters_file
 
   def initialize(args={})
-    @name = args['name'] ||= 'experiment'
+    @name = args['name'] ||= 'example'
     @input_parameters_file = args['input_parameters_file'] ||= './inputs.csv'
     @factor_space_width = args['factor_space_width'] ||= 20
     @experimental_matrix = build_experimental_matrix
+    @results_matrix = build_results_matrix
   end
 
   def X 
@@ -20,21 +21,8 @@ class Experiment
   end
 
   def center_point_run
+    raise NotImplementedError.new("Whil needs to build this.")
     # Center point run
-  end
-
-  def run(run_number)
-    experimental_matrix.row(run_number)
-  end
-
-  def run_parameters(run_number)
-    parameter_hash = {}
-    coded_run = run(run_number)
-    parameters.each_with_index do |parameter, index|
-      run_value = parameters[index].mid_point + (coded_run[index] * parameters[index].step_size(factor_space_width))
-      parameter_hash[parameter.name] = run_value
-    end
-    parameter_hash
   end
 
   def parameters
@@ -45,6 +33,16 @@ class Experiment
     parameters.each do |parameter|
       parameter.info
     end
+  end
+
+  def run_parameters(run_number)
+    parameter_hash = {}
+    coded_run = experimental_matrix.row(run_number)
+    parameters.each_with_index do |parameter, index|
+      run_value = parameters[index].mid_point + (coded_run[index] * parameters[index].step_size(factor_space_width))
+      parameter_hash[parameter.name] = run_value
+    end
+    parameter_hash
   end
 
   def describe_parameter(name)
@@ -68,7 +66,9 @@ class Experiment
     puts "_________________"
     puts "\nExperiment: #{name}\n"
     puts "Full factorial 2^#{parameters.length} experiment - #{2**parameters.length} runs\n"
-    puts describe_parameters
+    describe_parameters
+    experimental_matrix.column_labels
+    experimental_matrix.describe
     puts "_________________"
   end
 
@@ -95,6 +95,20 @@ class Experiment
 
     def build_experimental_matrix
       ::ExperimentalMatrixBuilder.new(parameters).call
+    end
+
+    def build_results_matrix
+      initial_matrix = Array.new(experimental_matrix.length)
+      saved_experimental_results.each_with_index do |value, index|
+        initial_matrix[index] = value
+      end
+      # Need to turn this into an rows x columns matrix nxm 8x1
+      initial_matrix
+    end
+
+    def saved_experimental_results
+      saved_data_file = "./data/#{self.name}_results.csv"
+      CSV.read(saved_data_file).first
     end
 
     def shorthand_permutations(array)

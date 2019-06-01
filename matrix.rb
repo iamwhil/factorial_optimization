@@ -28,4 +28,8 @@ class Matrix
     end
   end
 
+  def length
+    matrix.length
+  end
+
 end

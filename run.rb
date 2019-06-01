@@ -122,6 +122,6 @@ require_relative './experiment.rb'
 
 args = {}
 args['factor_space_width'] = 20
-args['name'] = "test_experiment"
+args['name'] = "example"
 experiment = Experiment.new(args)
-puts experiment.run_parameters(1)
+puts experiment.center_point_run
